@@ -48,7 +48,6 @@ function buildWithVyper(source, buildPath) {
   const contractDefinition = {
     contractName, abi, bytecode, deployedBytecode,
   };
-  console.log(contractDefinition); // eslint-disable-line
 
   fs.writeFileSync(
     `${buildPath}/${contractName}.json`,

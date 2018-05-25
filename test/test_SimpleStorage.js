@@ -2,7 +2,7 @@ const { assertRevert } = require('./helpers/assertRevert');
 
 
 /*
-    TODO: inject these variables with process.env... or find another nice way to run 
+    TODO: inject these variables with process.env... or find another nice way to run
     this on both impls with one command
 
 */
@@ -15,15 +15,14 @@ let ss; // init an empty variable that will occupy our contract
 
 
 contract(`SimpleStorage: ${lang}`, (accounts) => {
-    beforeEach(async () => {
-            ss = await SimpleStorage.new({from: accounts[0]});
-        }   
-    });
+  beforeEach(async () => {
+    ss = await SimpleStorage.new({ from: accounts[0] });
+  });
 
   it('Initializes with a value of zero', async () => {
     // let ss = await SimpleStorage.new({from: accounts[0], gas: 2000000});
     const value = await ss.value();
-    assert.equal(value.toNumber(),0);
+    assert.equal(value.toNumber(), 0);
   });
 
   it('calling setValue changes the value', async () => {
@@ -32,11 +31,11 @@ contract(`SimpleStorage: ${lang}`, (accounts) => {
     let value = await ss.value();
     assert.equal(value.toNumber(), 0);
 
-    await ss.setValue(10, {from: accounts[0]});
+    await ss.setValue(10, { from: accounts[0] });
     value = await ss.value();
     assert.equal(value.toNumber(), 10);
 
-    await ss.setValue(457, {from: accounts[0]});
+    await ss.setValue(457, { from: accounts[0] });
     value = await ss.value();
     assert.equal(value.toNumber(), 457);
   });

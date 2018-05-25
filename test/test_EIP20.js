@@ -1,10 +1,12 @@
-const { assertRevert } = require('../helpers/assertRevert');
+const { assertRevert } = require('./helpers/assertRevert');
 
-const EIP20Abstraction = artifacts.require('EIP20');
+const EIP20Abstraction = artifacts.require('solidity_EIP20');
+// const EIP20Abstraction = artifacts.require('vyper_eip20');
 let HST;
 
 contract('EIP20', (accounts) => {
   beforeEach(async () => {
+    console.log('make hst')
     HST = await EIP20Abstraction.new(10000, 'Simon Bucks', 1, 'SBX', { from: accounts[0] });
   });
 
