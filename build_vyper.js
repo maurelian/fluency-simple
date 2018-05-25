@@ -2,8 +2,19 @@ const fs = require('fs');
 const shell = require('shelljs');
 const colors = require('colors'); // eslint-disable-line
 
-build('./contracts/SimpleStorage', './build/contracts');
+const defaultBuildPath = './build/contracts'
 
+const contractsPath = process.argv[2];
+
+// Run the build function
+build(contractsPath, defaultBuildPath);
+
+
+/**
+ * [build description]
+ * @param  {string} contractsPath The immediate parent directory of contract files to be compiled
+ * @param  {string} buildPath     The directory to write the output to.
+ */
 function build(contractsPath, buildPath) {
   if (!shell.test('-d', buildPath)) {
     fs.mkdir(buildPath);
