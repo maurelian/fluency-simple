@@ -15,6 +15,23 @@ Approval: event({_owner: indexed(address), _spender: indexed(address), _value: u
 balances: uint256[address]
 allowances: (uint256[address])[address]
 num_issued: uint256
+max_uint_256: uint256 
+
+name: public(bytes32)
+decimals: public(uint256)
+symbol: public(bytes32)
+
+
+@public
+def __init__(_initial_amount: uint256, _token_name: bytes32, _decimals: uint256, _token_symbol: bytes32):
+    self.num_issued = _initial_amount
+    self.balances[msg.sender] = _initial_amount
+    self.name = _token_name
+    self.decimals = _decimals
+    self.symbol = _token_symbol
+    # self.max_uint_256 = 2**256-1 # this line would overflow before subtraction, next is equivalent
+    self.max_uint_256 = convert(2*(2**255-1)+1, 'uint256')
+    
 
 @public
 @payable
@@ -65,7 +82,8 @@ def transferFrom(_from : address, _to : address, _value : uint256) -> bool:
     # Make sure sufficient funds/allowance are present implicitly through overflow protection
     self.balances[_from] = uint256_sub(self.balances[_from], _value)
     self.balances[_to] = uint256_add(self.balances[_to], _value)
-    self.allowances[_from][_sender] = uint256_sub(allowance, _value)
+    # if allowance < self.max_uint_256:
+    #     self.allowances[_from][_sender] = uint256_sub(allowance, _value)
     # Fire transfer event
     log.Transfer(_from, _to, _value)
     return True

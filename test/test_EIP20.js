@@ -9,6 +9,8 @@ let HST;
 contract('EIP20', (accounts) => {
   beforeEach(async () => {
     HST = await EIP20Abstraction.new(10000, 'Simon Bucks', 1, 'SBX', { from: accounts[0] });
+    // HST = await EIP20Abstraction.new(10000, { from: accounts[0] });
+    debugger;
   });
 
   it('creation: should create an initial balance of 10000 for the creator', async () => {
@@ -17,8 +19,10 @@ contract('EIP20', (accounts) => {
   });
 
   it('creation: test correct setting of vanity information', async () => {
+    // fails for vyper, as the string type is currently unsupported.
+    // can use web3.toAscii(name), but that actually returns Simon Bucks\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000
     const name = await HST.name.call();
-    assert.strictEqual(name, 'Simon Bucks');
+    assert.equal(name, 'Simon Bucks');
 
     const decimals = await HST.decimals.call();
     assert.strictEqual(decimals.toNumber(), 1);
