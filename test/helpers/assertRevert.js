@@ -7,6 +7,6 @@ module.exports = {
       assert(revertFound, `Expected "revert", got ${error} instead`);
       return;
     }
-    assert.fail('Expected revert not received');
+    assert.fail('Expected revert not received', error.message);
   },
 };

@@ -1,16 +1,17 @@
 const { assertRevert } = require('./helpers/assertRevert');
 
+// const EIP20Abstraction = artifacts.require('EIP20');
 const EIP20Abstraction = artifacts.require('solidity_EIP20');
 // const EIP20Abstraction = artifacts.require('vyper_eip20');
 let HST;
 
+
 contract('EIP20', (accounts) => {
   beforeEach(async () => {
-    console.log('make hst')
     HST = await EIP20Abstraction.new(10000, 'Simon Bucks', 1, 'SBX', { from: accounts[0] });
   });
 
-  it.only('creation: should create an initial balance of 10000 for the creator', async () => {
+  it('creation: should create an initial balance of 10000 for the creator', async () => {
     const balance = await HST.balanceOf.call(accounts[0]);
     assert.strictEqual(balance.toNumber(), 10000);
   });
@@ -84,7 +85,7 @@ contract('EIP20', (accounts) => {
     const balance2 = await HST.balanceOf.call(accounts[2]);
     assert.strictEqual(balance2.toNumber(), 0, 'balance2 not correct');
 
-    await HST.transferFrom.call(accounts[0], accounts[2], 20, { from: accounts[1] }); //what is this line for?
+    await HST.transferFrom.call(accounts[0], accounts[2], 20, { from: accounts[1] });
     await HST.allowance.call(accounts[0], accounts[1]);
     await HST.transferFrom(accounts[0], accounts[2], 20, { from: accounts[1] }); // -20
     const allowance01 = await HST.allowance.call(accounts[0], accounts[1]);

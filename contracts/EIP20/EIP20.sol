@@ -5,10 +5,10 @@ Implements EIP20 token standard: https://github.com/ethereum/EIPs/blob/master/EI
 
 pragma solidity ^0.4.18;
 
-import "./solidity_EIP20Interface.sol";
+import "./EIP20Interface.sol";
 
 
-contract solidity_EIP20 is solidity_EIP20Interface {
+contract EIP20 is EIP20Interface {
 
     uint256 constant private MAX_UINT256 = 2**256 - 1;
     mapping (address => uint256) public balances;
@@ -23,7 +23,7 @@ contract solidity_EIP20 is solidity_EIP20Interface {
     uint8 public decimals;                //How many decimals to show.
     string public symbol;                 //An identifier: eg SBX
 
-    function solidity_EIP20(
+    function EIP20(
         uint256 _initialAmount,
         string _tokenName,
         uint8 _decimalUnits,

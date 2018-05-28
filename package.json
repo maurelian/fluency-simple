@@ -23,7 +23,8 @@
   "homepage": "",
   "dependencies": {
     "colors": "^1.3.0",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.2",
+    "truffle": "^4.0.7"
   },
   "devDependencies": {}
 }
