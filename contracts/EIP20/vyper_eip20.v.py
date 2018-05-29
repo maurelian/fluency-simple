@@ -62,9 +62,9 @@ def transferFrom(_from : address, _to : address, _value : uint256) -> bool:
     # Make sure sufficient funds/allowance are present implicitly through overflow protection
     self.balances[_from] = self.balances[_from] - _value
     self.balances[_to] = self.balances[_to] + _value
-    log.Number(allowance)
-    log.Number(self.max_uint_256)
-    log.Truthiness(allowance < self.max_uint_256)
+    log.Number(allowance) # 100
+    log.Number(self.max_uint_256) #     Number(_value: 1.15792089237316195423570985008687907853269984665640564039457584007913129639935e+77)
+    log.Truthiness(allowance < self.max_uint_256)  # Truthiness(_truthy: false)
     if allowance < self.max_uint_256:
         self.allowances[_from][_sender] = allowance - _value
     # Fire transfer event
