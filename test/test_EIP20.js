@@ -1,16 +1,21 @@
 const { assertRevert } = require('./helpers/assertRevert');
 
-// const EIP20Abstraction = artifacts.require('EIP20');
-const EIP20Abstraction = artifacts.require('solidity_EIP20');
-// const EIP20Abstraction = artifacts.require('vyper_eip20');
+let lang = 'vyper';
+// let lang = 'solidity';
+
+let EIP20Abstraction;
+if (lang === 'vyper') {
+  EIP20Abstraction = artifacts.require('vyper_eip20');
+} else if (lang === 'solidity') {
+  EIP20Abstraction = artifacts.require('solidity_EIP20');
+}
+
 let HST;
 
 
-contract('EIP20', (accounts) => {
+contract(`EIP20: ${lang}`, (accounts) => {
   beforeEach(async () => {
     HST = await EIP20Abstraction.new(10000, 'Simon Bucks', 1, 'SBX', { from: accounts[0] });
-    // HST = await EIP20Abstraction.new(10000, { from: accounts[0] });
-    debugger;
   });
 
   it('creation: should create an initial balance of 10000 for the creator', async () => {
@@ -21,6 +26,9 @@ contract('EIP20', (accounts) => {
   it('creation: test correct setting of vanity information', async () => {
     // fails for vyper, as the string type is currently unsupported.
     // can use web3.toAscii(name), but that actually returns Simon Bucks\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000
+    if (lang === 'vyper') {
+      assert(false, `Vyper doesn't support a String type.`);
+    }
     const name = await HST.name.call();
     assert.equal(name, 'Simon Bucks');
 
@@ -42,6 +50,9 @@ contract('EIP20', (accounts) => {
   // TRANSERS
   // normal transfers without approvals
   it('transfers: ether transfer should be reversed.', async () => {
+    if (lang === 'vyper') {
+      assert(false, `Vyper doesn't have the 'fallback' function feature that would be needed for this`);
+    }
     const balanceBefore = await HST.balanceOf.call(accounts[0]);
     assert.strictEqual(balanceBefore.toNumber(), 10000);
 
@@ -91,6 +102,7 @@ contract('EIP20', (accounts) => {
 
     await HST.transferFrom.call(accounts[0], accounts[2], 20, { from: accounts[1] });
     await HST.allowance.call(accounts[0], accounts[1]);
+
     await HST.transferFrom(accounts[0], accounts[2], 20, { from: accounts[1] }); // -20
     const allowance01 = await HST.allowance.call(accounts[0], accounts[1]);
     assert.strictEqual(allowance01.toNumber(), 80); // =80
@@ -174,7 +186,7 @@ contract('EIP20', (accounts) => {
     const balance0 = await HST.balanceOf.call(accounts[0]);
     assert.strictEqual(balance0.toNumber(), 10000);
 
-    const max = '1.15792089237316195423570985008687907853269984665640564039457584007913129639935e+77';
+    const max = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
     await HST.approve(accounts[1], max, { from: accounts[0] });
     const balance2 = await HST.balanceOf.call(accounts[2]);
     assert.strictEqual(balance2.toNumber(), 0, 'balance2 not correct');

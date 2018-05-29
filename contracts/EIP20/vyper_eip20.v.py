@@ -11,11 +11,12 @@
 # Events issued by the contract
 Transfer: event({_from: indexed(address), _to: indexed(address), _value: uint256})
 Approval: event({_owner: indexed(address), _spender: indexed(address), _value: uint256})
+Truthiness: event({_truthy: bool})
 
 balances: uint256[address]
 allowances: (uint256[address])[address]
 num_issued: uint256
-max_uint_256: uint256 
+max_uint_256: public(uint256)
 
 name: public(bytes32)
 decimals: public(uint256)
@@ -30,30 +31,8 @@ def __init__(_initial_amount: uint256, _token_name: bytes32, _decimals: uint256,
     self.decimals = _decimals
     self.symbol = _token_symbol
     # self.max_uint_256 = 2**256-1 # this line would overflow before subtraction, next is equivalent
-    self.max_uint_256 = convert(2*(2**255-1)+1, 'uint256')
-    
+    self.max_uint_256 = 2*(2**255-1)+1
 
-@public
-@payable
-def deposit():
-    _value: uint256 = convert(msg.value, 'uint256')
-    _sender: address = msg.sender
-    self.balances[_sender] = uint256_add(self.balances[_sender], _value)
-    self.num_issued = uint256_add(self.num_issued, _value)
-    # Fire deposit event as transfer from 0x0
-    log.Transfer(0x0000000000000000000000000000000000000000, _sender, _value)
-
-@public
-def withdraw(_value : uint256) -> bool:
-    _sender: address = msg.sender
-    # Make sure sufficient funds are present, op will not underflow supply
-    # implicitly through overflow protection
-    self.balances[_sender] = uint256_sub(self.balances[_sender], _value)
-    self.num_issued = uint256_sub(self.num_issued, _value)
-    send(_sender, as_wei_value(convert(_value, 'int128'), 'wei'))
-    # Fire withdraw event as transfer to 0x0
-    log.Transfer(_sender, 0x0000000000000000000000000000000000000000, _value)
-    return True
 
 @public
 @constant
@@ -69,8 +48,8 @@ def balanceOf(_owner : address) -> uint256:
 def transfer(_to : address, _value : uint256) -> bool:
     _sender: address = msg.sender
     # Make sure sufficient funds are present implicitly through overflow protection
-    self.balances[_sender] = uint256_sub(self.balances[_sender], _value)
-    self.balances[_to] = uint256_add(self.balances[_to], _value)
+    self.balances[_sender] = self.balances[_sender] - _value
+    self.balances[_to] = self.balances[_to] + _value
     # Fire transfer event
     log.Transfer(_sender, _to, _value)
     return True
@@ -80,10 +59,11 @@ def transferFrom(_from : address, _to : address, _value : uint256) -> bool:
     _sender: address = msg.sender
     allowance: uint256 = self.allowances[_from][_sender]
     # Make sure sufficient funds/allowance are present implicitly through overflow protection
-    self.balances[_from] = uint256_sub(self.balances[_from], _value)
-    self.balances[_to] = uint256_add(self.balances[_to], _value)
-    # if allowance < self.max_uint_256:
-    #     self.allowances[_from][_sender] = uint256_sub(allowance, _value)
+    self.balances[_from] = self.balances[_from] - _value
+    self.balances[_to] = self.balances[_to] + _value
+    log.Truthiness(allowance != self.max_uint_256)
+    if allowance != self.max_uint_256:
+        self.allowances[_from][_sender] = allowance - _value
     # Fire transfer event
     log.Transfer(_from, _to, _value)
     return True
