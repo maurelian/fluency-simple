@@ -12,6 +12,7 @@
 Transfer: event({_from: indexed(address), _to: indexed(address), _value: uint256})
 Approval: event({_owner: indexed(address), _spender: indexed(address), _value: uint256})
 Truthiness: event({_truthy: bool})
+Number: event({_value: uint256})
 
 balances: uint256[address]
 allowances: (uint256[address])[address]
@@ -61,8 +62,10 @@ def transferFrom(_from : address, _to : address, _value : uint256) -> bool:
     # Make sure sufficient funds/allowance are present implicitly through overflow protection
     self.balances[_from] = self.balances[_from] - _value
     self.balances[_to] = self.balances[_to] + _value
-    log.Truthiness(allowance != self.max_uint_256)
-    if allowance != self.max_uint_256:
+    log.Number(allowance)
+    log.Number(self.max_uint_256)
+    log.Truthiness(allowance < self.max_uint_256)
+    if allowance < self.max_uint_256:
         self.allowances[_from][_sender] = allowance - _value
     # Fire transfer event
     log.Transfer(_from, _to, _value)

@@ -1,0 +1,67 @@
+{
+  "contractName": "vyper_compare",
+  "abi": [
+    {
+      "name": "__init__",
+      "outputs": [],
+      "inputs": [],
+      "constant": false,
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "name": "lessThanMaxUint",
+      "outputs": [
+        {
+          "type": "bool",
+          "name": "out"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "a"
+        }
+      ],
+      "constant": false,
+      "payable": false,
+      "type": "function",
+      "gas": 510
+    },
+    {
+      "name": "notEqualToMaxUint",
+      "outputs": [
+        {
+          "type": "bool",
+          "name": "out"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "uint256",
+          "name": "a"
+        }
+      ],
+      "constant": false,
+      "payable": false,
+      "type": "function",
+      "gas": 543
+    },
+    {
+      "name": "max_uint_256",
+      "outputs": [
+        {
+          "type": "uint256",
+          "name": "out"
+        }
+      ],
+      "inputs": [],
+      "constant": true,
+      "payable": false,
+      "type": "function",
+      "gas": 543
+    }
+  ],
+  "bytecode": "0x600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a052341561009e57600080fd5b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6000556101e856600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a05263d23d6f5360005114156100c657602060046101403734156100b457600080fd5b600054610140511260005260206000f3005b63979c93a660005114156100fa57602060046101403734156100e757600080fd5b60005461014051141560005260206000f3005b636162cf95600051141561012057341561011357600080fd5b60005460005260206000f3005b5b6100c76101e8036100c76000396100c76101e8036000f3",
+  "deployedBytecode": "0x600035601c52740100000000000000000000000000000000000000006020526f7fffffffffffffffffffffffffffffff6040527fffffffffffffffffffffffffffffffff8000000000000000000000000000000060605274012a05f1fffffffffffffffffffffffffdabf41c006080527ffffffffffffffffffffffffed5fa0e000000000000000000000000000000000060a05263d23d6f5360005114156100c657602060046101403734156100b457600080fd5b600054610140511260005260206000f3005b63979c93a660005114156100fa57602060046101403734156100e757600080fd5b60005461014051141560005260206000f3005b636162cf95600051141561012057341561011357600080fd5b60005460005260206000f3005b"
+}
